@@ -1,9 +1,11 @@
 import { galleryItems } from './gallery-items.js';
 
 const gallery = document.querySelector('.gallery');
-const galleryItemsLi = document.querySelectorAll('.gallery__item');
 const backDrop = document.querySelector('.js-backdrop');
 const closeModalBtn = document.querySelector('[data-action="close-backdrop"]');
+const arrowPrevImg = document.querySelector('[data-action="previous-img"]');
+const arrowNextImg = document.querySelector('[data-action="next-img"]');
+const modalWndw = document.querySelector('.modal');
 
 const elements = galleryItems.map(item => createGalleryMarkup(item)).join('');
 gallery.insertAdjacentHTML('afterbegin', elements);
@@ -42,6 +44,8 @@ function createGalleryMarkup({ preview, original, description }) {
 //     </li>`;
 // });
 
+let currentActiveImgIndex;
+
 function onGalleryOpenBackDrop(event) {
   event.preventDefault();
 
@@ -51,11 +55,26 @@ function onGalleryOpenBackDrop(event) {
 
   document.body.classList.add('show-modal');
   window.addEventListener('keydown', onEscKeyPress);
+
+  const originalImageSrc = event.target.getAttribute('data-source');
+  const alt = event.target.getAttribute('alt');
+
+  showOriginalImg(originalImageSrc, alt);
+
+  currentActiveImgIndex = [...gallery.children].indexOf(
+    event.target.closest('.gallery__item')
+  );
+
+  arrowNextImg.addEventListener('click', showNextImg);
+  arrowPrevImg.addEventListener('click', showPrevImg);
+
+  window.addEventListener('keydown', onArrowKeyPress);
 }
 
 function onCloseBackDrop() {
   document.body.classList.remove('show-modal');
   window.removeEventListener('keydown', onEscKeyPress);
+  window.removeEventListener('keydown', onArrowKeyPress);
 }
 
 function onBackDropClick(event) {
@@ -66,42 +85,77 @@ function onBackDropClick(event) {
 
 function onEscKeyPress(event) {
   const ESC_KEY_CODE = 'Escape';
-  const isEscKey = event.code === ESC_KEY_CODE;
 
-  if (isEscKey) {
+  if (event.code === ESC_KEY_CODE) {
     onCloseBackDrop();
   }
 }
 
-// const lightBox = document.createElement('div');
-// lightBox.id = 'lightbox';
-// document.body.appendChild(lightBox);
-
-// galleryImages.forEach(image => {
-//   image.addEventListener('click', event => {
-//     event.preventDefault();
-
-//     const originalImageSrc = image
-//       .querySelector('.gallery__image')
-//       .getAttribute('data-source');
-
-//     lightBox.innerHTML = `
-//       <div class="lightbox__content">
-//         <img class="lightbox__image" src="${originalImageSrc}" alt="Full Image" loading="lazy"/>
-//       </div>
-//     `;
-
-//     lightBox.classList.add('active');
-
-//     lightbox.addEventListener('click', event => {
-//       if (event.target !== event.currentTarget) {
-//         return;
-//       }
-
-//       lightBox.classList.remove('active');
-//     });
-//   });
-// });
-
 // currentTarget = element with event listener
 // target = CLICKED ELEMENT(p)
+
+function showOriginalImg(imageSrc, alt) {
+  const originalImageConentDiv = document.querySelector(
+    '.original_image_conent'
+  );
+
+  originalImageConentDiv.innerHTML = `
+    <img
+      class="lightbox__image"
+      src="${imageSrc}"
+      alt="${alt}"
+      loading="lazy"
+      data-active
+    />`;
+}
+
+////////////////
+// function showNextImg() {
+//   const nextImgSrc = gallery.children[currentActiveImgIndex + 1]
+//     .querySelector('.gallery__image')
+//     .getAttribute('data-source');
+
+//   const nextImgAlt = gallery.children[currentActiveImgIndex + 1]
+//     .querySelector('.gallery__image')
+//     .getAttribute('alt');
+
+//   showOriginalImg(nextImgSrc, nextImgAlt);
+
+//   currentActiveImgIndex += 1;
+
+//   if (currentActiveImgIndex >= gallery.children.length - 1) {
+//     currentActiveImgIndex = -1;
+//   }
+// }
+
+function showNextImg() {
+  console.log('works');
+  const nextImgIndex = (currentActiveImgIndex + 1) % gallery.children.length;
+
+  const { original, description } = galleryItems[nextImgIndex];
+
+  showOriginalImg(original, description);
+
+  currentActiveImgIndex = nextImgIndex;
+}
+
+function showPrevImg() {
+  console.log('works');
+  const prevImgIndex =
+    (currentActiveImgIndex - 1 + gallery.children.length) %
+    gallery.children.length;
+
+  const { original, description } = galleryItems[prevImgIndex];
+
+  showOriginalImg(original, description);
+
+  currentActiveImgIndex = prevImgIndex;
+}
+
+function onArrowKeyPress(event) {
+  if (event.code === 'ArrowRight') {
+    showNextImg();
+  } else if (event.code === 'ArrowLeft') {
+    showPrevImg();
+  }
+}
