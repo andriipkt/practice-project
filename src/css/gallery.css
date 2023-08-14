@@ -33,7 +33,6 @@
 }
 
 .gallery__item {
-  position: relative;
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
 }
@@ -76,8 +75,7 @@
   opacity: 0;
   visibility: hidden;
 
-  transition: opacity var(--animation-duration) var(--timing-function),
-    visibility var(--animation-duration) var(--timing-function);
+  transition: opacity 350ms ease-in-out, visibility 350ms ease-in-out;
 }
 
 body.show-modal .backdrop {
@@ -86,15 +84,12 @@ body.show-modal .backdrop {
   pointer-events: initial;
 }
 
-/* body.show-modal .modal {
-  transform: translate(-50%, -50%) scale(0.4);
-} */
-
 .backdrop_close_btn {
   position: absolute;
   top: 24px;
   right: 24px;
   padding: 0;
+  z-index: 10;
 
   display: flex;
   justify-content: center;
@@ -125,6 +120,7 @@ body.show-modal .backdrop {
   top: 50%;
   left: 24px;
   transform: translateY(-50%);
+  z-index: 10;
 
   display: inline-block;
   margin: 0;
@@ -145,6 +141,7 @@ body.show-modal .backdrop {
   top: 50%;
   right: 24px;
   transform: translateY(-50%);
+  z-index: 10;
 
   display: inline-block;
   margin: 0;
@@ -168,4 +165,61 @@ body.show-modal .backdrop {
 .arrow_right:hover,
 .arrow_right:active {
   color: rgba(0, 0, 0, 0.6);
+}
+
+/* Анімація переходу вліво */
+.animate-left-out {
+  animation: slideOutLeft 500ms forwards;
+}
+
+@keyframes slideOutLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-150%);
+  }
+}
+
+/* Анімація переходу вправо */
+.animate-right-out {
+  animation: slideOutRight 500ms forwards;
+}
+
+@keyframes slideOutRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+/* Анімація переходу вправо */
+.animate-left-in {
+  animation: slideInLeft 500ms forwards;
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-right-in {
+  animation: slideInRight 500ms forwards;
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(150%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
 }

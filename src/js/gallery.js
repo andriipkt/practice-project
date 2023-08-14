@@ -5,7 +5,7 @@ const backDrop = document.querySelector('.js-backdrop');
 const closeModalBtn = document.querySelector('[data-action="close-backdrop"]');
 const arrowPrevImg = document.querySelector('[data-action="previous-img"]');
 const arrowNextImg = document.querySelector('[data-action="next-img"]');
-const modalWndw = document.querySelector('.modal');
+const originalImageConentDiv = document.querySelector('.original_image_conent');
 
 const elements = galleryItems.map(item => createGalleryMarkup(item)).join('');
 gallery.insertAdjacentHTML('afterbegin', elements);
@@ -95,17 +95,11 @@ function onEscKeyPress(event) {
 // target = CLICKED ELEMENT(p)
 
 function showOriginalImg(imageSrc, alt) {
-  const originalImageConentDiv = document.querySelector(
-    '.original_image_conent'
-  );
-
   originalImageConentDiv.innerHTML = `
     <img
       class="lightbox__image"
       src="${imageSrc}"
       alt="${alt}"
-      loading="lazy"
-      data-active
     />`;
 }
 
@@ -134,9 +128,23 @@ function showNextImg() {
 
   const { original, description } = galleryItems[nextImgIndex];
 
-  showOriginalImg(original, description);
+  if (originalImageConentDiv.classList.contains('animate-left-in')) {
+    originalImageConentDiv.classList.remove('animate-left-in');
+  }
 
-  currentActiveImgIndex = nextImgIndex;
+  // toggling classes
+  originalImageConentDiv.classList.remove('animate-right-in');
+  originalImageConentDiv.classList.add('animate-left-out');
+
+  // waiting till animation ends
+  setTimeout(() => {
+    showOriginalImg(original, description);
+    currentActiveImgIndex = nextImgIndex;
+
+    // togglin classes
+    originalImageConentDiv.classList.remove('animate-left-out');
+    originalImageConentDiv.classList.add('animate-right-in');
+  }, 250);
 }
 
 function showPrevImg() {
@@ -147,9 +155,23 @@ function showPrevImg() {
 
   const { original, description } = galleryItems[prevImgIndex];
 
-  showOriginalImg(original, description);
+  if (originalImageConentDiv.classList.contains('animate-right-in')) {
+    originalImageConentDiv.classList.remove('animate-right-in');
+  }
 
-  currentActiveImgIndex = prevImgIndex;
+  // toggling classes
+  originalImageConentDiv.classList.remove('animate-left-in');
+  originalImageConentDiv.classList.add('animate-right-out');
+
+  // waiting till animation ends
+  setTimeout(() => {
+    showOriginalImg(original, description);
+    currentActiveImgIndex = prevImgIndex;
+
+    // toggling classes
+    originalImageConentDiv.classList.remove('animate-right-out');
+    originalImageConentDiv.classList.add('animate-left-in');
+  }, 250);
 }
 
 function onArrowKeyPress(event) {
