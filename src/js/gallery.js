@@ -176,6 +176,7 @@ function showPrevImg() {
 
 function onArrowKeyPress(event) {
   if (event.code === 'ArrowRight') {
+    arrowNextImg.classList.add('arrow_left:active');
     showNextImg();
   } else if (event.code === 'ArrowLeft') {
     showPrevImg();

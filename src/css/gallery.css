@@ -1,21 +1,50 @@
 #header-main_gallery {
   padding: 0 20px;
+  background-color: rgb(0, 0, 59);
+  margin-top: 0;
+  margin-bottom: 24px;
+  width: 100%;
 }
 
 .gallery_nav {
-  width: 100%;
-  height: 60px;
-  max-width: 1200px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  height: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .gallery_nav ul {
   list-style: none;
+
   display: flex;
-  gap: 10px;
+  gap: 14px;
+}
+/* .gallery_nav ul li {
+  border: 1px solid transparent;
+  border-radius: 50%;
+
+  transition: border 1000ms var(--timing-function);
+} */
+.gallery_nav ul a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+
+  transition: color var(--animation-duration) var(--timing-function);
+}
+
+/* .gallery_nav ul li:hover,
+.gallery_nav ul li:focus {
+  color: orange;
+  border: 1px solid orange;
+  border-radius: 50%;
+} */
+.gallery_nav ul a:hover,
+.gallery_nav ul a:focus {
+  color: orange;
 }
 
 /* GALLERY */
@@ -89,6 +118,8 @@ body.show-modal .backdrop {
   top: 24px;
   right: 24px;
   padding: 0;
+
+  transform: scale(1);
   z-index: 10;
 
   display: flex;
@@ -106,7 +137,8 @@ body.show-modal .backdrop {
   border: 1px solid rgba(0, 0, 0, 0.1);
 
   transition: background-color var(--animation-duration) var(--timing-function),
-    color var(--animation-duration) var(--timing-function);
+    color var(--animation-duration) var(--timing-function),
+    transform 50ms var(--timing-function);
 }
 
 .backdrop_close_btn:hover,
@@ -114,12 +146,15 @@ body.show-modal .backdrop {
   background-color: rgba(0, 0, 0, 0.6);
   color: rgba(255, 255, 255, 0.8);
 }
+.backdrop_close_btn:active {
+  transform: scale(0.8);
+}
 
 .arrow_left {
   position: absolute;
   top: 50%;
   left: 24px;
-  transform: translateY(-50%);
+  transform: translateY(-50%) scale(1);
   z-index: 10;
 
   display: inline-block;
@@ -133,14 +168,15 @@ body.show-modal .backdrop {
   border: none;
   outline: none;
 
-  transition: color var(--animation-duration) var(--timing-function);
+  transition: color var(--animation-duration) var(--timing-function),
+    transform 50ms var(--timing-function);
 }
 
 .arrow_right {
   position: absolute;
   top: 50%;
   right: 24px;
-  transform: translateY(-50%);
+  transform: translateY(-50%) scale(1);
   z-index: 10;
 
   display: inline-block;
@@ -154,17 +190,22 @@ body.show-modal .backdrop {
   border: none;
   outline: none;
 
-  transition: color var(--animation-duration) var(--timing-function);
+  transition: color var(--animation-duration) var(--timing-function),
+    transform 50ms var(--timing-function);
 }
 
-.arrow_left:hover,
+.arrow_left:hover {
+  color: rgba(0, 0, 0, 0.6);
+}
 .arrow_left:active {
-  color: rgba(0, 0, 0, 0.6);
+  transform: translateY(-50%) scale(0.8);
 }
 
-.arrow_right:hover,
-.arrow_right:active {
+.arrow_right:hover {
   color: rgba(0, 0, 0, 0.6);
+}
+.arrow_right:active {
+  transform: translateY(-50%) scale(0.8);
 }
 
 /* Анімація переходу вліво */
@@ -175,11 +216,11 @@ body.show-modal .backdrop {
 @keyframes slideOutLeft {
   0% {
     transform: translateX(0);
-    opacity: 0;
+    opacity: 1;
   }
   100% {
-    opacity: 1;
-    transform: translateX(-150%);
+    transform: translateX(-100%);
+    opacity: 0;
   }
 }
 
@@ -191,9 +232,11 @@ body.show-modal .backdrop {
 @keyframes slideOutRight {
   0% {
     transform: translateX(0);
+    opacity: 1;
   }
   100% {
-    transform: translateX(150%);
+    transform: translateX(100%);
+    opacity: 0;
   }
 }
 
@@ -204,10 +247,12 @@ body.show-modal .backdrop {
 
 @keyframes slideInLeft {
   0% {
-    transform: translateX(-150%);
+    transform: translateX(-100%);
+    opacity: 0;
   }
   100% {
     transform: translateX(0%);
+    opacity: 1;
   }
 }
 
@@ -217,9 +262,11 @@ body.show-modal .backdrop {
 
 @keyframes slideInRight {
   0% {
-    transform: translateX(150%);
+    transform: translateX(100%);
+    opacity: 0;
   }
   100% {
     transform: translateX(0%);
+    opacity: 1;
   }
 }
